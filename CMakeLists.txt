@@ -28,6 +28,8 @@ set(LIB_SOUR
 	src/Recvresponse.cc
 	src/Frame.cc
 	src/UdpSocket.cc
+	src/FiletsServer.cc
+	src/FiletsClient.cc
         )
 
 add_library(Filets STATIC ${LIB_SOUR})
@@ -65,4 +67,10 @@ target_link_libraries(FrameTest ${TAR_LIB})
 
 add_executable(UdpSocketTest tests/UdpSocketTest.cc)
 target_link_libraries(UdpSocketTest ${TAR_LIB})
+
+add_executable(FiletsServerTest tests/FiletsServerTest.cc)
+target_link_libraries(FiletsServerTest ${TAR_LIB})
+
+add_executable(FiletsClientTest tests/FileClientTest.cc)
+target_link_libraries(FiletsClientTest ${TAR_LIB})
 

@@ -10,5 +10,7 @@
 #include"Recvresponse.h"
 #include"RequestPayload.h"
 #include"UdpSocket.h"
+#include"FiletsServer.h"
+#include"FiletsClient.h"
 
 #endif
