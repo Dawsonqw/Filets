@@ -14,7 +14,7 @@ namespace Daw{
 		this->out_stream=stream;
 	}
 
-	///直接将数组中内容写到文件流中
+	///文件流操作对象是文件流 这里write是将vector数据写到文件流中
 	void WriteBuffer::write(const std::vector<uint8_t>&result){
 		this->out_stream->write(reinterpret_cast<const char*>(result.data()),result.size());
 	}
@@ -23,6 +23,8 @@ namespace Daw{
 	void WriteBuffer::write_file(){
 		auto size=WriteBuffer::DefaultBufferSize;
 		if(this->buffer.size()>=size/2)return;
+		this->out_stream->seekp(0,std::ios::end);
+		int len=this->out_stream->tellp();
 	}
 
 

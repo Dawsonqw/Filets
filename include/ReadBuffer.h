@@ -3,11 +3,11 @@
 #include<fstream>
 #include<queue>
 
-
 namespace Daw{
 
 class ReadBuffer{
 	protected:
+		///in 
 		std::ifstream * in_stream=nullptr;
 		std::queue<uint8_t>buffer;
 		bool end_flag=false;

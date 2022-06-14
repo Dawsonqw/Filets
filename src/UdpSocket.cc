@@ -31,13 +31,13 @@ namespace Daw{
 	}
 
 	size_t UdpSocket::sendto(const std::vector<byte_t>&buffer,const std::string& remote_addr,const port_t remote_port){
-		struct sockaddr_in cur_addr;
+		struct sockaddr_in dst_addr;
 
-		cur_addr.sin_family=AF_INET;
-		cur_addr.sin_port=htons(remote_port);
-		inet_pton(AF_INET,remote_addr.c_str(),&cur_addr.sin_addr);
+		dst_addr.sin_family=AF_INET;
+		dst_addr.sin_port=htons(remote_port);
+		inet_pton(AF_INET,remote_addr.c_str(),&dst_addr.sin_addr);
 
-		int send_size=::sendto(this->m_fd,reinterpret_cast<const char*>(&buffer[0]),buffer.size(),0,(struct sockaddr*)&cur_addr,sizeof(cur_addr));
+		int send_size=::sendto(this->m_fd,reinterpret_cast<const char*>(&buffer[0]),buffer.size(),0,(struct sockaddr*)&dst_addr,sizeof(dst_addr));
 		
 		if(send_size==-1)throw std::exception();
 		return send_size;
@@ -51,13 +51,13 @@ namespace Daw{
 		return send_size;
 	}
 
-	void UdpSocket::connect(const std::string& ret_addr,port_t remote_port){
-		struct sockaddr_in& cur_addr=this->remote_addr;
-		cur_addr.sin_family=AF_INET;
-		cur_addr.sin_port=htons(remote_port);
-		inet_pton(AF_INET,ret_addr.c_str(),&cur_addr.sin_addr);
+	void UdpSocket::connect(const std::string& remote_addr,port_t remote_port){
+		struct sockaddr_in& dst_addr=this->remote_addr;
+		dst_addr.sin_family=AF_INET;
+		dst_addr.sin_port=htons(remote_port);
+		inet_pton(AF_INET,remote_addr.c_str(),&dst_addr.sin_addr);
 		///todo?没写完吧。。。
-		if(::connect(this->m_fd,(struct sockaddr*)&cur_addr,sizeof(cur_addr)))
+		if(::connect(this->m_fd,(struct sockaddr*)&dst_addr,sizeof(dst_addr)))
 			throw std::exception();
 	}
 
@@ -69,7 +69,7 @@ namespace Daw{
 		int recv_size=::recvfrom(this->m_fd,reinterpret_cast<char*>(&buffer[0]),buffer.capacity(),0,(struct sockaddr*)&cur_addr,&cur_len);
 
 		if(recv_size<0)throw std::exception();
-		
+		///传出 port和addr
 		src_addr=inet_ntoa(cur_addr.sin_addr);
 		src_port=htons(cur_addr.sin_port);
 		return recv_size;

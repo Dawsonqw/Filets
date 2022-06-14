@@ -14,11 +14,11 @@ namespace Daw{
 			uint16_t block_size=1024;
 
 		public:
-			std::vector<uint8_t>serialize(void)override;
+			std::vector<uint8_t>get(void)override;
 
-			void serialize_append(std::vector<uint8_t>&out)override;
+			void get_append(std::vector<uint8_t>&out)override;
 
-			static void deserialize(std::vector<uint8_t>&content,RequestPayload** parsed_section);
+			static void put(std::vector<uint8_t>&content,RequestPayload** parsed_section);
 
 			bool operator==(const Payload* other)const override;
 

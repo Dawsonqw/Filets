@@ -18,11 +18,13 @@ namespace Daw{
 
 	class Frame{
 		public:
+			///数据帧：序列号 响应号 数据载体
 			uint32_t seq;
 			uint32_t ack;
 			FrameType type;
 			///crc sections checksum
 			Payload* payload=nullptr;
+			///todo：是否加上校验
 
 		public:
 			Frame()=default;
@@ -30,12 +32,12 @@ namespace Daw{
 			Frame(seq_t seq,seq_t ack,FrameType type);
 
 			///put a section on the back of thre frame
-			void put(Payload* payload);
+			void mount(Payload* payload);
 			
 			//序列化
-			std::vector<uint8_t> serialize(void)const;
+			std::vector<uint8_t> get(void)const;
 
-			static Frame deserialize(std::vector<uint8_t>& frame);
+			static Frame put(std::vector<uint8_t>& frame);
 
 			bool operator==(const Frame& other)const;
 	};

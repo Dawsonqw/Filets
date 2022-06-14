@@ -7,11 +7,11 @@ int main(){
 	payload.response=true;
 
 	std::vector<uint8_t>app={0x60,0x61,0x62};
-	payload.serialize_append(app);
-	std::vector<uint8_t>buffer=payload.serialize();
+	payload.get_append(app);
+	std::vector<uint8_t>buffer=payload.get();
 	for(auto ch:buffer)std::cout<<ch;
 
 
 	Daw::RecvResponse* res=nullptr;
-	Daw::RecvResponse::deserialize(app,&res);
+	Daw::RecvResponse::put(app,&res);
 }

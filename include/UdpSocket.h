@@ -14,7 +14,6 @@ namespace Daw{
 		public:
 			std::string host;
 			port_t port;
-
 			std::vector<byte_t> payload;
 	};
 

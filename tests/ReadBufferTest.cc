@@ -10,7 +10,7 @@ int main(){
 	std::ifstream in;
 	in.open("../tests/text.txt");
 	Daw::ReadBuffer rbuffer(&in);
-	auto expend=rbuffer.read(100);
+	auto expend=rbuffer.read(1024);
 	cout<<expend.size()<<"\n";
 	for(auto ch:expend)cout<<ch<<" ";
 	in.close();

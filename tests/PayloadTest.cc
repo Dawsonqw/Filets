@@ -11,7 +11,7 @@ int main(){
 	payload.file_size=0x5A8A;
 	payload.block_size=1024;
 
-	std::vector<uint8_t>buffer=payload.serialize();
+	std::vector<uint8_t>buffer=payload.get();
 		
 	for(auto ch:buffer)std::cout<<ch<<" ";
 }

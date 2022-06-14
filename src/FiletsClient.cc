@@ -27,15 +27,15 @@ namespace Daw{
 	bool FiletsClient::try_send(){
 		Frame r_frame(0,0,FrameType::SendRequest);
 		RequestPayload* payload=this->prepare_send_request();
-		r_frame.put(payload);
-		auto buffer=r_frame.serialize();
+		r_frame.mount(payload);
+		auto buffer=r_frame.get();
 		delete payload;
 		payload=nullptr;
 
 		this->socket_.send(buffer);
 		auto r_packet=this->socket_.recvfrom();
 
-		Frame response=Frame::deserialize(r_packet.payload);
+		Frame response=Frame::put(r_packet.payload);
 		auto* resp=dynamic_cast<RecvResponse*>(response.payload);
 		auto ack=resp->response;
 		delete resp;
@@ -87,8 +87,8 @@ namespace Daw{
 			payload->content=disk_buffer;
 
 			Frame frame(0,0,FrameType::Data);
-			frame.put(payload);
-			auto net_buffer=frame.serialize();
+			frame.mount(payload);
+			auto net_buffer=frame.get();
 
 			this->socket_.send(net_buffer);
 			status.completed_size+=net_buffer.size();

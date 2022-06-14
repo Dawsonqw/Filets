@@ -44,26 +44,30 @@ constexpr static uint32_t table[] = {
 Frame::Frame(seq_t seq,seq_t ack,FrameType type):seq(seq),ack(ack),type(type){
 }
 
-void Frame::put(Payload* payload){
+void Frame::mount(Payload* payload){
 	this->payload=payload;
 }
 
-std::vector<uint8_t> Frame::serialize()const{
+std::vector<uint8_t> Frame::get()const{
+	///整个数据帧结构：seq：ack：type：校验码：数据
 	std::vector<uint8_t>frame;
-	
 	push_u32(frame,this->seq);
 	push_u32(frame,this->ack);
 	push_u8(frame,static_cast<uint8_t>(this->type));
 
-	auto b_payload=this->payload->serialize();
+	///拿到数据做校验
+	auto b_payload=this->payload->get();
 	auto crc=cal_crc32(b_payload);
 	
-	push_u32(frame,crc);
+	push_u32(frame,crc);//校验码追加到最后
 	frame.insert(frame.end(),b_payload.begin(),b_payload.end());
 	return frame;
 }
 
-Frame Frame::deserialize(std::vector<uint8_t>& frame){
+Frame Frame::put(std::vector<uint8_t>& frame){
+	/**
+	 *方法：通过frame进行构造frame结构体
+	 * **/
 	auto it=frame.begin();
 	auto seq=get_u32(it);
 	auto ack=get_u32(it);
@@ -80,15 +84,15 @@ Frame Frame::deserialize(std::vector<uint8_t>& frame){
 
 	switch(static_cast<FrameType>(type)){
 		case FrameType::SendRequest:
-			RequestPayload::deserialize(payload,reinterpret_cast<RequestPayload**>(&c_payload));
+			RequestPayload::put(payload,reinterpret_cast<RequestPayload**>(&c_payload));
 			break;
 
 		case FrameType::RecvResponse:
-			RecvResponse::deserialize(payload,reinterpret_cast<RecvResponse**>(&c_payload));
+			RecvResponse::put(payload,reinterpret_cast<RecvResponse**>(&c_payload));
 			break;
 			
 		case FrameType::Data:
-			DataPayload::deserialize(payload,reinterpret_cast<DataPayload**>(&c_payload));
+			DataPayload::put(payload,reinterpret_cast<DataPayload**>(&c_payload));
 			break;
 
 		default:
@@ -110,7 +114,6 @@ bool Frame::operator==(const Frame& other)const{
 uint32_t cal_crc32(const std::vector<uint8_t>&content){
 	auto size=content.size();
 	uint32_t crc=0;
-
 	if(size<1)return 0xffffffff;
 
 	for(auto i=0;i!=size;i++)

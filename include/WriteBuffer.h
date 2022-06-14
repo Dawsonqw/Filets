@@ -16,7 +16,6 @@ namespace Daw{
 
 		protected:
 			void write_file();
-
 		public:
 			WriteBuffer()=default;
 

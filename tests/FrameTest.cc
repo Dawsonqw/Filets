@@ -15,9 +15,9 @@ int main(){
 	frame.seq=0xffffffff;
 	frame.ack=0x01010101;
 	frame.type=Daw::FrameType::SendRequest;
-	frame.put(payload);
+	frame.mount(payload);
 
-	auto buffer=frame.serialize();
+	auto buffer=frame.get();
 
 	for(auto ch:buffer)std::cout<<ch;
 
@@ -31,7 +31,7 @@ int main(){
     };
 	   std::cout<<"=================================\n";
 
-	   auto result=Daw::Frame::deserialize(buf);
+	   auto result=Daw::Frame::put(buf);
 	   std::cout<<result.seq<<"\n";
 	   std::cout<<result.ack<<"\n";
 

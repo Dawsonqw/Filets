@@ -31,7 +31,7 @@ namespace Daw{
 		auto packet=socket_.recvfrom();
 		this->socket_.connect(packet.host,packet.port);
 
-		auto request=Frame::deserialize(packet.payload);
+		auto request=Frame::put(packet.payload);
 		this->file_size_=reinterpret_cast<RequestPayload*>(request.payload)->file_size;
 		return *dynamic_cast<RequestPayload*>(request.payload);
 	}
@@ -49,7 +49,7 @@ namespace Daw{
 		
 		while(status_.completed_size<status_.total_size){
 			auto buffer=this->socket_.recvfrom();
-			auto frame=Frame::deserialize(buffer.payload);
+			auto frame=Frame::put(buffer.payload);
 			auto content=((DataPayload*)frame.payload)->content;
 
 			this->buffer_->write(content);
@@ -65,9 +65,9 @@ namespace Daw{
 		auto *payload=new RecvResponse();
 
 		payload->response=true;
-		data_frame.put(payload);
+		data_frame.mount(payload);
 		
-		auto buffer=data_frame.serialize();
+		auto buffer=data_frame.get();
 		this->socket_.send(buffer);
 	}
 
@@ -76,9 +76,9 @@ namespace Daw{
 		auto *payload=new RecvResponse();
 
 		payload->response=false;
-		data_frame.put(payload);
+		data_frame.mount(payload);
 
-		auto buffer=data_frame.serialize();
+		auto buffer=data_frame.get();
 		this->socket_.send(buffer);
 	}
 

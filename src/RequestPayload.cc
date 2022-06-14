@@ -6,14 +6,14 @@
 #include<cassert>
 
 namespace Daw{
-	std::vector<uint8_t>RequestPayload::serialize(){
+	std::vector<uint8_t>RequestPayload::get(){
 		std::vector<uint8_t>result;
 
-		serialize_append(result);
+		get_append(result);
 		return std::move(result);
 	}
 
-	void RequestPayload::serialize_append(std::vector<uint8_t>&out){
+	void RequestPayload::get_append(std::vector<uint8_t>&out){
 		Daw::push_string(out,this->client_name);
 		Daw::push_string(out,this->file_name);
 		Daw::push_u32(out,file_id);
@@ -21,7 +21,7 @@ namespace Daw{
 		Daw::push_u16(out,block_size);
 	}
 
-	void RequestPayload::deserialize(std::vector<uint8_t>&content,RequestPayload** parsed_section){
+	void RequestPayload::put(std::vector<uint8_t>&content,RequestPayload** parsed_section){
 		auto& payload=*parsed_section;
 		auto it=content.begin();
 

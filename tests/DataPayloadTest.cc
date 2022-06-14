@@ -9,6 +9,6 @@ int main(){
 
 	payload.content=test;
 
-	std::vector<uint8_t>buffer=payload.serialize();
+	std::vector<uint8_t>buffer=payload.get();
 	for(auto ch:buffer)std::cout<<ch<<"";
 }

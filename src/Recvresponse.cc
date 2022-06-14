@@ -5,17 +5,17 @@
 #include"Payload.h"
 
 namespace Daw{
-	std::vector<uint8_t> RecvResponse::serialize(){
+	std::vector<uint8_t> RecvResponse::get(){
 		std::vector<uint8_t>result;
-		serialize_append(result);
+		get_append(result);
 		return std::move(result);
 	}
 
-	void RecvResponse::serialize_append(std::vector<uint8_t>& out){
-		push_u32(out,this->response);///bool变量为什么用32位？
+	void RecvResponse::get_append(std::vector<uint8_t>& out){
+		push_u32(out,this->response);	
 	}
 
-	void RecvResponse::deserialize(std::vector<uint8_t>&buffer,RecvResponse** parsed_section){
+	void RecvResponse::put(std::vector<uint8_t>&buffer,RecvResponse** parsed_section){
 		auto &payload=*parsed_section;
 
 		assert(nullptr!=parsed_section&&nullptr==payload);
