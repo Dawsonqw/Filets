@@ -67,15 +67,15 @@ namespace Daw{
 		if(err.value()!=0)throw std::exception();
 
 		auto file_name=parse_file_name(this->file_path_);
-
 		auto* payload=new RequestPayload();
-		payload->client_name="client";
+		payload->client_name="client";//todo:利用socket进行
 		payload->file_name=file_name;
 		payload->file_size=this->file_size_;
 		return payload;
 	}
 
-	void FiletsClient::send(const std::function<bool(TransferProcess)>&callback){
+	//void FiletsClient::send(const std::function<bool(TransferProcess&)>&callback){
+	void FiletsClient::send(){
 		auto& status=this->status_;
 		
 		status.total_size=this->file_size_;
@@ -83,7 +83,7 @@ namespace Daw{
 
 		while(status.completed_size<status.total_size){
 			auto disk_buffer=this->buffer_.read(1024);
-			auto* payload=new DataPayload();
+			DataPayload* payload=new DataPayload();
 			payload->content=disk_buffer;
 
 			Frame frame(0,0,FrameType::Data);
@@ -93,7 +93,7 @@ namespace Daw{
 			this->socket_.send(net_buffer);
 			status.completed_size+=net_buffer.size();
 
-			if(!callback(status))throw std::exception();
+	//		if(!callback(status))throw std::exception();
 		}
 	}
 }

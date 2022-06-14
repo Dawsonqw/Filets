@@ -38,7 +38,7 @@ namespace Daw{
 
 			bool try_send(void);
 
-			void send(const std::function<bool(TransferProcess)>&callback);
+			void send();
 
 			void close(void);
 

@@ -20,11 +20,12 @@ namespace Daw{
 	**/
 
 	class FiletsServer{
+		///维护一个socket 文件流 文件缓冲区 路径 文件大小 已经发送信息
 		protected:
 			UdpSocket socket_;
 			
 			///文件流
-			std::ofstream* out_=nullptr;
+			std::ofstream* file_stream_=nullptr;
 			///发送缓冲区
 			WriteBuffer* buffer_;	
 			///发送文件大小
@@ -45,7 +46,7 @@ namespace Daw{
 
 			void decline();
 
-			void write(const std::function<bool(TransferProcess)>& callback);
+			void write();
 
 			void close();
 	};

@@ -74,3 +74,9 @@ target_link_libraries(FiletsServerTest ${TAR_LIB})
 add_executable(FiletsClientTest tests/FileClientTest.cc)
 target_link_libraries(FiletsClientTest ${TAR_LIB})
 
+add_executable(Server tests/Server.cc)
+target_link_libraries(Server ${TAR_LIB})
+
+add_executable(Client tests/Client.cc)
+target_link_libraries(Client ${TAR_LIB})
+
